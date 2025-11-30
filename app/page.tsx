@@ -1,65 +1,127 @@
-import Image from "next/image";
+// app/page.tsx
+
+type KPI = {
+  label: string;
+  value: string;
+};
+
+type TopPage = {
+  url: string;
+  views: number;
+};
+
+type VisitByDay = {
+  day: string;
+  visitors: number;
+};
 
 export default function Home() {
+  const kpis: KPI[] = [
+    { label: "Visiteurs aujourd'hui", value: "1 284" },
+    { label: "Pages vues", value: "3 972" },
+    { label: "Taux de conversion", value: "4,3 %" },
+    { label: "Nouvelles inscriptions", value: "87" },
+  ];
+
+  const topPages: TopPage[] = [
+    { url: "/pricing", views: 982 },
+    { url: "/blog/seo-guide", views: 756 },
+    { url: "/landing/black-friday", views: 643 },
+    { url: "/features", views: 512 },
+  ];
+
+  const visitsByDay: VisitByDay[] = [
+    { day: "Lun", visitors: 720 },
+    { day: "Mar", visitors: 860 },
+    { day: "Mer", visitors: 910 },
+    { day: "Jeu", visitors: 790 },
+    { day: "Ven", visitors: 1040 },
+    { day: "Sam", visitors: 680 },
+    { day: "Dim", visitors: 540 },
+  ];
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
+    <main className="dashboard">
+      {/* Sidebar */}
+      <aside className="sidebar">
+        <div className="logo">R.Analytics</div>
+        <nav className="sidebar-nav">
+          <a href="#" className="sidebar-link active">
+            Dashboard
           </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
+          <a href="#" className="sidebar-link">
+            Rapports
           </a>
+          <a href="#" className="sidebar-link">
+            Utilisateurs
+          </a>
+          <a href="#" className="sidebar-link">
+            Paramètres
+          </a>
+        </nav>
+      </aside>
+
+      {/* Contenu principal */}
+      <section className="content">
+        <header className="content-header">
+          <div>
+            <h1>Vue d’ensemble</h1>
+            <p className="subtitle">Performances des 7 derniers jours</p>
+          </div>
+          <button className="btn-primary">Exporter les données</button>
+        </header>
+
+        {/* KPIs */}
+        <div className="kpi-grid">
+          {kpis.map((kpi) => (
+            <div key={kpi.label} className="kpi-card">
+              <span className="kpi-label">{kpi.label}</span>
+              <span className="kpi-value">{kpi.value}</span>
+            </div>
+          ))}
         </div>
-      </main>
-    </div>
+
+        <div className="grid-2">
+          {/* Graphique simplifié (fake) */}
+          <div className="card">
+            <h2>Visiteurs par jour</h2>
+            <div className="chart-placeholder">
+              {visitsByDay.map((item) => (
+                <div key={item.day} className="chart-bar">
+                  <div
+                    className="chart-bar-inner"
+                    style={{
+                      height: `${(item.visitors / 1100) * 100}%`,
+                    }}
+                  />
+                  <span className="chart-label">{item.day}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Top pages */}
+          <div className="card">
+            <h2>Pages les plus vues</h2>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Page</th>
+                  <th>Vues</th>
+                </tr>
+              </thead>
+              <tbody>
+                {topPages.map((page) => (
+                  <tr key={page.url}>
+                    <td>{page.url}</td>
+                    <td>{page.views}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }
